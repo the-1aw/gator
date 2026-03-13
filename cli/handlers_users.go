@@ -2,14 +2,8 @@ package cli
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
-	"time"
-
-	"github.com/google/uuid"
-
-	"github.com/the-1aw/gator/internal/database"
 )
 
 func handlerLogin(s *state, cmd command) error {
@@ -29,12 +23,7 @@ func handlerRegister(s *state, cmd command) error {
 	if len(cmd.args) < 1 {
 		return errors.New("register only expect a single <NAME> argument")
 	}
-	user, err := s.db.CreateUser(context.Background(), database.CreateUserParams{
-		ID:        uuid.New(),
-		CreatedAt: sql.NullTime{Time: time.Now(), Valid: true},
-		UpdatedAt: sql.NullTime{Time: time.Now(), Valid: true},
-		Name:      cmd.args[0],
-	})
+	user, err := s.db.CreateUser(context.Background(), cmd.args[0])
 	if err != nil {
 		return err
 	}

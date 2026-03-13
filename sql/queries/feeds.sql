@@ -1,6 +1,6 @@
 -- name: CreateFeed :one
-insert into feeds (id, created_at, updated_at, name, url, user_id)
-values ($1,$2,$3,$4,$5,$6)
+insert into feeds (name, url, user_id)
+values ($1,$2,$3)
 returning *;
 
 -- name: GetFeedSummary :many
@@ -10,7 +10,7 @@ on users.id = user_id;
 
 -- name: MarkFeedFetched :exec
 update feeds
-set last_fetched_at = current_timestamp, updated_at = current_date
+set last_fetched_at = current_timestamp, updated_at = current_timestamp
 where id = $1;
 
 -- name: GetNextFeedToFetch :one

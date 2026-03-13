@@ -1,6 +1,6 @@
 -- name: CreateUser :one
-insert into users (id, created_at, updated_at, name)
-values ($1, $2, $3, $4)
+insert into users (name)
+values ($1)
 returning *;
 
 -- name: GetUser :one
