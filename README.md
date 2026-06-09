@@ -6,6 +6,8 @@ A CLI for aggregating and browsing RSS feeds, backed by PostgreSQL.
 
 - Go 1.25+
 - PostgreSQL
+
+**These are provided through go tool as tool dependencies**
 - [goose](https://github.com/pressly/goose) (migrations)
 - [sqlc](https://sqlc.dev) (only needed if modifying SQL queries/schema)
 
@@ -23,7 +25,7 @@ A CLI for aggregating and browsing RSS feeds, backed by PostgreSQL.
 
 3. Run migrations:
    ```bash
-   goose -dir sql/schema postgres "$DB_URL" up
+   go tool goose -dir sql/schema postgres "$DB_URL" up
    ```
 
 4. Build and install:
@@ -69,10 +71,10 @@ go build ./...
 go test ./...
 
 # After editing sql/queries/ or sql/schema/
-sqlc generate
+go tool sqlc generate
 
 # Run a migration rollback
-goose -dir sql/schema postgres "$DB_URL" down
+go tool goose -dir sql/schema postgres "$DB_URL" down
 ```
 
 ## Planned improvements
