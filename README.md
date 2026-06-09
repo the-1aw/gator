@@ -5,33 +5,13 @@ A CLI for aggregating and browsing RSS feeds, backed by PostgreSQL.
 ## Requirements
 
 - Go 1.25+
-- PostgreSQL
+- A PostgreSQL Database
 
-**These are provided through go tool as tool dependencies**
+**These are required but provided through go tool as tool dependencies**
 - [goose](https://github.com/pressly/goose) (migrations)
 - [sqlc](https://sqlc.dev) (only needed if modifying SQL queries/schema)
 
-## Setup
-
-1. Create a PostgreSQL database.
-
-2. Create `~/.gatorconfig.json`:
-   ```json
-   {
-     "db_url": "postgres://<user>:<password>@localhost:5432/gator?sslmode=disable",
-     "current_user_name": ""
-   }
-   ```
-
-3. Run migrations:
-   ```bash
-   go tool goose -dir sql/schema postgres "$DB_URL" up
-   ```
-
-4. Build and install:
-   ```bash
-   go install .
-   ```
+## Setup (TBD)
 
 ## Usage
 
@@ -66,6 +46,19 @@ gator browse 10     # in another terminal, browse the latest posts
 
 ## Development
 
+1. Create `~/.gatorconfig.json`:
+   ```json
+   {
+     "db_url": "postgres://<user>:<password>@localhost:5432/gator?sslmode=disable",
+     "current_user_name": ""
+   }
+   ```
+
+2. Run migrations:
+   ```bash
+   go tool goose -dir sql/schema postgres "$DB_URL" up
+   ```
+
 ```bash
 go build ./...
 go test ./...
@@ -79,6 +72,11 @@ go tool goose -dir sql/schema postgres "$DB_URL" down
 
 ## Planned improvements
 - [x] Refactor `cli/cli.go` into smaller packages
+- [ ] Update readme setup
+- [ ] Update readme development
+- [ ] Add makefile command to setup and install project
+- [ ] use XDG_CONFIG_HOME for default gator config
+- [ ] Tidy migrations (since nothing runs in production we could remove altering migrations and only keep the table creation)
 - [ ] Use timestamps instead of dates for every created_at and updated_at fields
 - [ ] Add default values for uuid and timestamp so we don't need to create one everytime we want to insert something from the db
 - [ ] User-friendly error messages for SQL errors
