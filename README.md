@@ -46,6 +46,18 @@ gator browse 10     # in another terminal, browse the latest posts
 
 ## Development
 
+**Running the app requires a running PostgreSQL instance.**  
+You can start one with Docker if you don't have one:
+ ```bash
+ docker run --name gator-db \
+   -e POSTGRES_USER=gator-user \
+   -e POSTGRES_PASSWORD=password \
+   -e POSTGRES_DB=gator \
+   -p 5432:5432 \
+   -v postgres-data:/bar/lib/postgresql/data \
+   -d postgres
+ ```
+
 1. Create `~/.gatorconfig.json`:
    ```json
    {
@@ -55,30 +67,33 @@ gator browse 10     # in another terminal, browse the latest posts
    ```
 
 2. Run migrations:
+
+    ```bash
+        mv .env.exemple .env
+        # Fill in .env with your credentials
+        go tool goose up
+    ```
+
+    OR
+
    ```bash
    go tool goose -dir sql/schema postgres "$DB_URL" up
    ```
 
-```bash
-go build ./...
-go test ./...
-
-# After editing sql/queries/ or sql/schema/
-go tool sqlc generate
-
-# Run a migration rollback
-go tool goose -dir sql/schema postgres "$DB_URL" down
-```
+3. Build the binary:
+   ```bash
+   make build      # compile and produce ./gator binary
+   ```
 
 ## Planned improvements
 - [x] Refactor `cli/cli.go` into smaller packages
-- [ ] Update readme setup
-- [ ] Update readme development
-- [ ] Add makefile command to setup and install project
-- [ ] use XDG_CONFIG_HOME for default gator config
+- [x] Add makefile command to setup and install project and update readme development
+- [ ] Use XDG_CONFIG_HOME for default gator config
 - [ ] Tidy migrations (since nothing runs in production we could remove altering migrations and only keep the table creation)
+- [ ] Update project design so it can be database agnostic
+- [ ] Update readme setup and rename it install
+- [ ] Background service manager to keep `agg` running and restart on crash
+- [ ] User-friendly error messages for SQL errors
 - [ ] Use timestamps instead of dates for every created_at and updated_at fields
 - [ ] Add default values for uuid and timestamp so we don't need to create one everytime we want to insert something from the db
-- [ ] User-friendly error messages for SQL errors
 - [ ] HTTP API with authentication for remote access
-- [ ] Background service manager to keep `agg` running and restart on crash
